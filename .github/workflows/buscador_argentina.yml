@@ -7,9 +7,9 @@ on:
   # ── Ejecución automática 4 veces por día (hora Argentina = UTC-3) ──
   schedule:
     - cron: '0 12 * * *'   # 09:00 AR
-    - cron: '0 15 * * *'   # 12:00 AR
-    - cron: '0 19 * * *'   # 16:00 AR
-    - cron: '0 23 * * *'   # 20:00 AR
+    #- cron: '0 15 * * *'   # 12:00 AR
+    #- cron: '0 19 * * *'   # 16:00 AR
+    #- cron: '0 23 * * *'   # 20:00 AR
 
 jobs:
   buscar-vacantes-argentina:
