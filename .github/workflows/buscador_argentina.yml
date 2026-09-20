@@ -11,6 +11,10 @@ on:
     #- cron: '0 19 * * *'   # 16:00 AR
     #- cron: '0 23 * * *'   # 20:00 AR
 
+concurrency:
+  group: buscador-vacantes-v2
+  cancel-in-progress: false
+
 jobs:
   buscar-vacantes-argentina:
     runs-on: ubuntu-latest
