@@ -1,0 +1,19 @@
+# Entorno / secretos
+.env
+.env.*
+*.local
+
+# Python
+__pycache__/
+*.pyc
+
+# Datos de corrida (no subir: el workflow los persiste con actions/cache)
+vacantes_vistas_*.json
+resultados_ultima_corrida.json
+
+# Logs
+run.log
+
+# CVs personales
+*.pdf
+*.docx

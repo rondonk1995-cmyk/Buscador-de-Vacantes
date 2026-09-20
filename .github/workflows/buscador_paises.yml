@@ -1,0 +1,55 @@
+name: 🤖 Vacantes Otros Países (lun y vie)
+
+on:
+  # ── Ejecución manual desde GitHub ──
+  workflow_dispatch:
+
+  # ── Ejecución automática 2 veces por semana (hora Argentina = UTC-3) ──
+  schedule:
+    - cron: '0 12 * * 1'   # lunes 09:00 AR
+    - cron: '0 12 * * 5'   # viernes 09:00 AR
+
+jobs:
+  buscar-vacantes-paises:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # 2. Configurar Python
+      - name: 🐍 Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # 3. Instalar dependencias (usa caché automático gracias al cache: 'pip' de arriba)
+      - name: 📦 Instalar dependencias
+        run: pip install -r requirements.txt
+
+      # 4. Restaurar el archivo de vacantes ya vistas (persistencia entre corridas)
+      - name: 💾 Restaurar vacantes_vistas.json
+        uses: actions/cache@v4
+        with:
+          path: vacantes_vistas_Kevin.json
+          key: vacantes-vistas-${{ github.run_id }}
+          restore-keys: |
+            vacantes-vistas-
+
+      # 5. Ejecutar el bot (SOLO otros países, remoto)
+      - name: 🚀 Ejecutar buscador (solo otros países)
+        env:
+          EMAIL_REMITENTE: ${{ secrets.EMAIL_REMITENTE }}
+          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO }}
+          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+        run: python alerta_empleos_linkedin.py --once --solo-paises
+
+      # 6. Guardar el archivo actualizado de vacantes vistas
+      - name: 💾 Guardar vacantes_vistas_Kevin.json actualizado
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: vacantes_vistas_Kevin.json
+          key: vacantes-vistas-${{ github.run_id }}
